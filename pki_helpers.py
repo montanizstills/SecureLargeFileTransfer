@@ -1,6 +1,7 @@
 import subprocess
 from datetime import datetime, timedelta
 from socket import *
+from time import sleep
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -201,3 +202,11 @@ if __name__ == "__main__":
         private_key,
         "my_certificate.pem",
     )
+
+    do_aes_encryption()
+    send_file()  # encrypted - MontanizStills.txt
+    send_file()  # unencrypted
+
+    des3_decrypted = do_3des_decryption() #benard-key.txt
+    # verify
+
