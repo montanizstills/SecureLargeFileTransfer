@@ -39,7 +39,7 @@ nc -l -p port > montanizstills.txt
 # sender
 nc dst port < montanizstills.txt
 
-echo "Benard" > .tmp
+echo "B FULL NAME" > .tmp
 cat montanizstills.txt >> .tmp
 mv .tmp montanizstills.txt
 
