@@ -1,0 +1,31 @@
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ ls
+bernardclarke-2.crt   montanizstills-key.txt         True-CA.crt
+montanizstills-1.crt  montanizstills-privatekey.pem
+montanizstills-2.crt  montanizstills.txt
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ openssl pkeyutl -encrypt -certin -inkey bernardclarke-2.crt -in montanizstills-key.txt -out montanizstills-key.cipher
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ ls
+bernardclarke-2.crt   montanizstills-key.cipher      montanizstills.txt
+montanizstills-1.crt  montanizstills-key.txt         True-CA.crt
+montanizstills-2.crt  montanizstills-privatekey.pem
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.cipher
+*** WARNING : deprecated key derivation used.
+Using -iter or -pbkdf2 would be better.
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ ls
+bernardclarke-2.crt        montanizstills-key.txt
+montanizstills-1.crt       montanizstills-privatekey.pem
+montanizstills-2.crt       montanizstills.txt
+montanizstills.cipher      True-CA.crt
+montanizstills-key.cipher
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ openssl dgst -sha256 -sign montanizstills-privatekey.pem -out montanizstills.txt.sgn montanizstills.cipher
+Enter pass phrase for montanizstills-privatekey.pem:
+
+ms1621474@UbuntuVM-23:~/SecureLargeFileTransfer$ ls
+bernardclarke-2.crt    montanizstills-key.cipher      montanizstills.txt.sgn
+montanizstills-1.crt   montanizstills-key.txt         True-CA.crt
+montanizstills-2.crt   montanizstills-privatekey.pem
+montanizstills.cipher  montanizstills.txt
