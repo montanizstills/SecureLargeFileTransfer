@@ -51,7 +51,7 @@ nc dst port < montanizstills-key.cipher
 #8. (5 pts) A uses AES algorithm (cbc mode) and a key(password) to encrypt
 #the file([A’s full name].txt) and sends it to B. A’s encrypted file name: [A’s full
 #name].cipher
-openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.txt
+openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.cipher
 
 #11. (5 pts) A signs the hash value of the large secret file ([A’s full name].txt)
 #and sends the signed hash value to B via netcat. The signed file name is [A’s
@@ -72,11 +72,13 @@ openssl pkeyutl -decrypt -in BernardClarke-key.cipher -inkey montanizstills-priv
 #name]-key.txt to decrypt the file: [B’s full name].cipher into [B’s full
 #name].txt , and shows the content: This is to confirm that this file comes
 #from B (full name)
-nc -l src_port > BFULLNAME.cipher
-openssl decrypt 3des -in BFULLNAME.cipher -out B.txt -pass file:montanizstills-key.txt
-cat BFULLNAME.txt
+nc -l src_port > BernardClarke.cipher
+openssl decrypt 3des -in BernardClarke.cipher -out BernardClarke.txt -pass BernardClarke-key.txt
+#openssl decrypt 3des -in BernardClarke.cipher -out BernardClarke.txt -pass file:montanizstills-key.txt
+cat BernardClarke.txt
 
 #15. (5 pts) A receives B’s the digital signature. A verifies that the file sent was
 #signed by B and was not changed over the transmission.
 #"""
-openssl dgst -sha256 -verify B-public-key.pem -signature BFULLNAME.txt.sgn BFULLNAME.txt
+nc -l port > BernardClarke.txt.sgn
+openssl dgst -sha256 -verify BernardClarke-2.crt -signature BernardClarke.txt.sgn BernardClarke.txt
