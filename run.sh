@@ -34,12 +34,12 @@ nc dst port < montanizstills-key.cipher
 #8. (5 pts) A uses AES algorithm (cbc mode) and a key(password) to encrypt
 #the file([A’s full name].txt) and sends it to B. A’s encrypted file name: [A’s full
 #name].cipher
-openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.cipher
+openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.txt
 
 #11. (5 pts) A signs the hash value of the large secret file ([A’s full name].txt)
 #and sends the signed hash value to B via netcat. The signed file name is [A’s
 #full name].txt.sgn.
-openssl dgst -sha256 -sign montanizstills-private-key.pem -out montanizstills.txt.sgn montanizstills.cipher
+openssl dgst -sha256 -sign montanizstills-private-key.pem -out montanizstills.txt.sgn montanizstills-key.txt
 nc dst port < montanizstills.txt.sgn
 
 #12. (5 pts) A starts Wireshark to capture the process to receive B’s encrypted
