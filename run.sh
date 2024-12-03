@@ -29,20 +29,14 @@ openssl verify -verbose -CAfile ./csci6746/True-CA.crt ./csci6746/montanizstills
   #contain any space between first, middle and last names).
 
 # receive
-nc -l -p port > BFULLNAME.txt
-echo "BFULLNAME" > .tmp
-cat BFULLNAME.txt >> .tmp
-mv .tmp BFULLNAME.txt
+nc -l port > BernardClarke.cipher
+echo "BernardClarke" > .tmp
+cat BernardClarke.txt >> .tmp
+mv .tmp BernardClarke.txt
 
 
 # send
 nc dst port < montanizstills.txt
-
-
-#8. (5 pts) A uses AES algorithm (cbc mode) and a key(password) to encrypt
-#the file([A’s full name].txt) and sends it to B. A’s encrypted file name: [A’s full
-#name].cipher
-openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k passwordkey
 
 #9. (5 pts) A stores the symmetric key in a file called: [A’s full name]-key.txt
 # create random symmetric key by any means?
@@ -51,13 +45,18 @@ openssl rand -base64 32 > montanizstills-key.txt
 #10. (5 pts) A uses B’s public key (or certificate) to encrypt the symmetric key
 #file ([A’s full name]-key.txt), and sends the encrypted file to B. The encrypted
 #key file name: [A’s full name]-key.cipher
-openssl pkeyutl -encrypt -certin -inkey B_PUBLICKEY.pem -in montanizstills-key.txt -out montanizstills-key.cipher
+openssl pkeyutl -encrypt -certin -inkey BernardClarke-2.crt -in montanizstills-key.txt -out montanizstills-key.cipher
 nc dst port < montanizstills-key.cipher
+
+#8. (5 pts) A uses AES algorithm (cbc mode) and a key(password) to encrypt
+#the file([A’s full name].txt) and sends it to B. A’s encrypted file name: [A’s full
+#name].cipher
+openssl enc -aes-256-cbc -in montanizstills.txt -out montanizstills.cipher -k montanizstills-key.txt
 
 #11. (5 pts) A signs the hash value of the large secret file ([A’s full name].txt)
 #and sends the signed hash value to B via netcat. The signed file name is [A’s
 #full name].txt.sgn.
-openssl dgst -sha256 -sign montanizstills-private-key.pem -out montanizstills.txt.sgn montanizstills.txt
+openssl dgst -sha256 -sign montanizstills-private-key.pem -out montanizstills.txt.sgn montanizstills.cipher
 nc dst port < montanizstills.txt.sgn
 
 #12. (5 pts) A starts Wireshark to capture the process to receive B’s encrypted
@@ -67,7 +66,7 @@ nc dst port < montanizstills.txt.sgn
 
 #13. A uses private key to decrypt [B’s full name]-key.cipher to obtain the key:
 #[B’s full name]-key.txt
-openssl pkeyutl -decrypt -in B-key.cipher -inkey montanizstills-private-key.pem -out montanizstills-key.txt
+openssl pkeyutl -decrypt -in BernardClarke-key.cipher -inkey montanizstills-private-key.pem -out BernardClarke-key.txt
 
 #14. (5 pts) A receives B’s encrypted large file, and uses the key in [B’s full
 #name]-key.txt to decrypt the file: [B’s full name].cipher into [B’s full
