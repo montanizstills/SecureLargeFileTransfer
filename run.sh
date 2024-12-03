@@ -21,23 +21,6 @@ openssl verify -verbose -CAfile ./csci6746/True-CA.crt ./csci6746/montanizstills
 #<Wireshark>###############################################
 
 
-#7. (5 pts) A needs to transfer a large secret file ([YourFullName].txt) to B via
-#netcat. Use the following steps to change the sending file:
-  #a. Download and modify the attached file to contain A’s full name at the very
-  #beginning of the file: This is to confirm that this file comes from A (A’s full name) .
-  #b. The file name should be changed to: [A’s full name].txt (Full name should not
-  #contain any space between first, middle and last names).
-
-# receive
-nc -l port > BernardClarke.cipher
-echo "BernardClarke" > .tmp
-cat BernardClarke.txt >> .tmp
-mv .tmp BernardClarke.txt
-
-
-# send
-nc dst port < montanizstills.txt
-
 #9. (5 pts) A stores the symmetric key in a file called: [A’s full name]-key.txt
 # create random symmetric key by any means?
 openssl rand -base64 32 > montanizstills-key.txt
@@ -74,8 +57,17 @@ openssl pkeyutl -decrypt -in BernardClarke-key.cipher -inkey montanizstills-priv
 #from B (full name)
 nc -l src_port > BernardClarke.cipher
 openssl decrypt 3des -in BernardClarke.cipher -out BernardClarke.txt -pass BernardClarke-key.txt
-#openssl decrypt 3des -in BernardClarke.cipher -out BernardClarke.txt -pass file:montanizstills-key.txt
 cat BernardClarke.txt
+
+#7. (5 pts) A needs to transfer a large secret file ([YourFullName].txt) to B via
+#netcat. Use the following steps to change the sending file:
+  #a. Download and modify the attached file to contain A’s full name at the very
+  #beginning of the file: This is to confirm that this file comes from A (A’s full name) .
+  #b. The file name should be changed to: [A’s full name].txt (Full name should not
+  #contain any space between first, middle and last names).
+echo "BernardClarke" > .tmp
+cat BernardClarke.txt >> .tmp
+mv .tmp BernardClarke.txt
 
 #15. (5 pts) A receives B’s the digital signature. A verifies that the file sent was
 #signed by B and was not changed over the transmission.
